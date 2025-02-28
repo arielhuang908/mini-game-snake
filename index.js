@@ -38,13 +38,29 @@ window.addEventListener('keydown', changeDirection);
 startButton.addEventListener('click', () => {
 
     const parentElement = startButton.parentElement;
+    
     parentElement.remove();
 
     gameStart();
 
 });
 
-resetButton.addEventListener('click', resetGame);
+resetButton.addEventListener('click', () => {
+
+    if (running) return;
+
+    const parentElement = startButton.parentElement;
+
+    if (parentElement.clientHeight) {
+        
+        parentElement.remove();
+    
+    }
+
+    resetGame();
+    gameStart();
+
+});
 
 /* functions */
 
@@ -204,6 +220,8 @@ function drawSnake() {
 
 function changeDirection(event) {
 
+    if (!running) return;
+
     event.preventDefault();
 
     const keyPressed = event.keyCode;
@@ -303,9 +321,13 @@ function displayGameOver() {
 
     running = false;
 
+    resetButton.focus();
+    
 };
 
 function resetGame() {
+
+    if (running) return;
 
     score = 0;
     xVelocity = unitSize;
@@ -317,7 +339,5 @@ function resetGame() {
         { x: unitSize * 2, y: 0 },
         { x: 0, y: 0 }
     ];
-
-    gameStart();
 
 };
